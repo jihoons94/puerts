@@ -55,7 +55,6 @@ set ( PUERTS_SRC
     Src/Puerts.cpp
     Src/Log.cpp
     Src/JSEngine.cpp
-    Src/JSEngine_Eval.cpp
     Src/JSFunction.cpp
     ${PROJECT_SOURCE_DIR}/../../unreal/Puerts/Source/JsEnv/Private/V8InspectorImpl.cpp
 )
@@ -107,10 +106,6 @@ endif ()
 
 if ( WIN32 AND NOT CYGWIN )
     target_compile_definitions (puerts PRIVATE BUILDING_V8_SHARED)
-endif ()
-
-if ( NOT CMAKE_BUILD_TYPE MATCHES "Release" )
-    target_compile_definitions (puerts PRIVATE PUERTS_DEBUG)
 endif ()
 
 include(${PROJECT_SOURCE_DIR}/cmake/${JS_ENGINE}/CMakeLists.txt)
