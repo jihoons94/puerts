@@ -17,43 +17,40 @@ env:
 jobs:
   android:
     runs-on: ubuntu-latest
+    
     steps:
       - uses: actions/checkout@v2
-      - name: Download artifact
-        uses: dawidd6/action-download-artifact@v2
+      - name: Get backend artifact
+        uses: ./.github/workflows/composites/unity-download-backend/
         with:
-          workflow: build_v8.yml
-          name: v8_bin
-          path: unity/native_src/
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          backend: 'v8'
       - name: Install NDK
         run: |
           cd ~
           wget -O NDK -q https://dl.google.com/android/repository/android-ndk-r21b-linux-x86_64.zip
           sudo apt install unzip -y
           unzip -q NDK
-          export ANDROID_NDK=~/android-ndk-r21b
       - name: Build
         run: |
-          ls ~/android-ndk-r21b
           cd unity/native_src
           chmod 777 make_android.sh
-          ./make_android.sh
+          ANDROID_NDK=~/android-ndk-r21b ./make_android.sh
       - name: Upload
         uses: actions/upload-artifact@v2
         with:
           path: ./unity/Assets/Plugins/**/*
           name: Unity_Plugins_V8
-          
   ios:
     runs-on: macos-10.15
+
     steps:
       - uses: actions/checkout@v2
-      - name: Download artifact
-        uses: dawidd6/action-download-artifact@v2
+      - name: Get backend artifact
+        uses: ./.github/workflows/composites/unity-download-backend/
         with:
-          workflow: build_v8.yml
-          name: v8_bin
-          path: unity/native_src/
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          backend: 'v8'
       - name: Use Xcode 12.0 for x86
         run: sudo xcode-select -switch "/Applications/Xcode_12.app"
       - name: Build
@@ -65,17 +62,16 @@ jobs:
         with:
           path: ./unity/Assets/Plugins/**/*
           name: Unity_Plugins_V8
-
   osx:
     runs-on: macos-10.15
+
     steps:
       - uses: actions/checkout@v2
-      - name: Download artifact
-        uses: dawidd6/action-download-artifact@v2
+      - name: Get backend artifact
+        uses: ./.github/workflows/composites/unity-download-backend/
         with:
-          workflow: build_v8.yml
-          name: v8_bin
-          path: unity/native_src/
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          backend: 'v8'
       - name: Use Xcode 12.0 for x86
         run: sudo xcode-select -switch "/Applications/Xcode_12.app"
       - name: Build
@@ -87,39 +83,37 @@ jobs:
         with:
           path: ./unity/Assets/Plugins/**/*
           name: Unity_Plugins_V8
-
   osx_node:
     runs-on: macos-10.15
+
     steps:
       - uses: actions/checkout@v2
-      - name: Download artifact
-        uses: dawidd6/action-download-artifact@v2
+      - name: Get backend artifact
+        uses: ./.github/workflows/composites/unity-download-backend/
         with:
-          workflow: build_nodejs.yml
-          name: nodejs_bin
-          path: unity/native_src/
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          backend: 'nodejs'
       - name: Use Xcode 12.0 for x86
         run: sudo xcode-select -switch "/Applications/Xcode_12.app"
       - name: Build
         run: |
           cd unity/native_src
-          sh ./make_osx_node.sh
+          sh ./make_osx.sh nodejs
       - name: Upload
         uses: actions/upload-artifact@v2
         with:
           path: ./unity/Assets/Plugins/**/*
-          name: Unity_Plugins_Nodejs
-
+          name: Unity_Plugins_NodeJS
   windows:
     runs-on: windows-2019
+
     steps:
       - uses: actions/checkout@v2
-      - name: Download artifact
-        uses: dawidd6/action-download-artifact@v2
+      - name: Get backend artifact
+        uses: ./.github/workflows/composites/unity-download-backend/
         with:
-          workflow: build_v8.yml
-          name: v8_bin
-          path: unity/native_src/
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          backend: 'v8'
       - name: Build
         run: |
           cd unity\native_src
@@ -130,25 +124,23 @@ jobs:
         with:
           path: ./unity/Assets/Plugins/**/*
           name: Unity_Plugins_V8
-
   windows_node:
     runs-on: windows-2019
+
     steps:
       - uses: actions/checkout@v2
-      - name: Download artifact
-        uses: dawidd6/action-download-artifact@v2
+      - name: Get backend artifact
+        uses: ./.github/workflows/composites/unity-download-backend/
         with:
-          workflow: build_nodejs.yml
-          name: nodejs_bin
-          path: unity/native_src/
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          backend: 'nodejs'
       - name: Build
         run: |
           cd unity\native_src
-          .\make_win64_node.bat
-          # .\make_win32_node.bat
+          .\make_win64.bat nodejs
+          # .\make_win32.bat nodejs
       - name: Upload
         uses: actions/upload-artifact@v2
         with:
           path: ./unity/Assets/Plugins/**/*
-          name: Unity_Plugins_Nodejs
-          
+          name: Unity_Plugins_NodeJS
