@@ -11,6 +11,9 @@ project(PuertsPlugin)
 
 set(CMAKE_CXX_STANDARD 14)
 
+# for Deuggging
+target_compile_definitions (puerts PRIVATE WITH_INSPECTOR)
+
 if ( IOS )
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fembed-bitcode")
         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fembed-bitcode")
