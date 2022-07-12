@@ -11,8 +11,6 @@ project(PuertsPlugin)
 
 set(CMAKE_CXX_STANDARD 14)
 
-# for Deuggging
-target_compile_definitions (puerts PRIVATE WITH_INSPECTOR)
 
 if ( IOS )
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fembed-bitcode")
@@ -222,5 +220,8 @@ if ( WIN32 AND NOT CYGWIN AND NOT ( CMAKE_SYSTEM_NAME STREQUAL "WindowsStore" ) 
 	set_property(TARGET puerts PROPERTY
              MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 endif ()
+
+#definition
+target_compile_definitions (puerts PRIVATE WITH_INSPECTOR)
 
 install(TARGETS puerts DESTINATION bin)
